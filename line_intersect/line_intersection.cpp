@@ -20,6 +20,8 @@ float det(float p1[], float p2[]) {
   return p1[0]*p2[1] - p1[1]*p2[0];
 }
 
+// Our get_intersect only checks intersections at infinite bounds.
+// We must check that our intersection is within the bounds of our line segment.
 bool check_intersect(Line l1, Line l2, Point i){
   if(i.x <= max(l1.p1.x, l1.p2.x) && i.x >= min(l1.p1.x, l1.p2.x) && i.y <= max(l1.p1.y, l1.p2.y) && i.y >= min(l1.p1.y, l1.p2.y)) {
     if(i.x <= max(l2.p1.x, l2.p2.x) && i.x >= min(l2.p1.x, l2.p2.x) && i.y <= max(l2.p1.y, l2.p2.y) && i.y >= min(l2.p1.y, l2.p2.y)) {
@@ -29,6 +31,8 @@ bool check_intersect(Line l1, Line l2, Point i){
   return false;
 }
 
+// Adapting method from: 
+// http://en.wikipedia.org/wiki/Line%E2%80%93line_intersection
 Point get_intersect(Line l1, Line l2){
   float ix = ((l1.p1.x*l1.p2.y - l1.p1.y*l1.p2.x) * (l2.p1.x-l2.p2.x) - (l1.p1.x-l1.p2.x) * (l2.p1.x*l2.p2.y - l2.p1.y*l2.p2.x))
              / ((l1.p1.x-l1.p2.x) * (l2.p1.y-l2.p2.y) - (l1.p1.y-l1.p2.y) * (l2.p1.x-l2.p2.x));
@@ -38,8 +42,8 @@ Point get_intersect(Line l1, Line l2){
   return i;
 }
 
+// Test Hardcoded points intersection.
 void test_intersect() {
-  // Test Hardcoded points
   Point p1 = {-1, -1};
   Point p2 = {1, 1};
   Point p3 = {1, -1};
@@ -62,8 +66,6 @@ int main(int argc, char* argv[]) {
   // Read in line file, store in line vector.
   vector<Line> lines;
   ifstream fi;
-
-  // test_intersect();
 
   fi.open("points.txt");
   while(!fi.eof()) {
